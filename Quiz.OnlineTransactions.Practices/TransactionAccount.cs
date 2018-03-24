@@ -20,15 +20,25 @@ namespace Quiz.OnlineTransactions.Practices
 
         public override decimal GetBalance()
         {
-            return (decimal)this.GetSqlConn().ExecuteScalar(@"select [balance] from [accounts] where userid = @param0", this.Name);
+            return this.GetSqlConn().ExecuteScalar<decimal>(
+                @"select [balance] from [accounts] where userid = @name", 
+                new { name = this.Name });
         }
 
         public override decimal ExecTransaction(decimal transferAmount)
         {
-            return 0;
+            return this.GetSqlConn().ExecuteScalar<decimal>(
+                @"
+begin tran
+  insert [transactions] ([userid], [amount]) values (@name, @transfer);
+  update [accounts] set [balance] = [balance] + @transfer where userid = @name;
+  select [balance] from [accounts] where userid = @name;
+commit
+",
+                new { name = this.Name, transfer = transferAmount });
         }
 
-        public override IEnumerable<Item> GetHistory()
+        public override IEnumerable<TransactionItem> GetHistory()
         {
             throw new NotImplementedException();
         }

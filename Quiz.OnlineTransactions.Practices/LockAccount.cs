@@ -9,40 +9,12 @@ using System.Threading.Tasks;
 namespace Quiz.OnlineTransactions.Practices
 {
 
-    public abstract class RemoteAccount : AccountBase
-    {
-        protected abstract bool RequireLock(string lockName, int timeout = 30000);
-        protected abstract bool ReleaseLock(string lockName);
-
-
-        public override decimal GetBalance()
-        {
-            // just call under API
-            throw new NotImplementedException();
-        }
-
-        public override decimal ExecTransaction(decimal transferAmount)
-        {
-            if (this.RequireLock(this.Name) == false) throw new Exception("transaction fail: can not require lock");
-
-            // do transaction
-
-            this.ReleaseLock(this.Name);
-            return this.GetBalance();
-        }
-
-        public override IEnumerable<Item> GetHistory()
-        {
-            // just call under API
-            throw new NotImplementedException();
-        }
-    }
 
 
     public class LockAccount : AccountBase
     {
         private decimal _balance = 0;
-        private List<Item> _history = new List<Item>();
+        private List<TransactionItem> _history = new List<TransactionItem>();
         private object _syncroot = new object();
 
 
@@ -55,7 +27,7 @@ namespace Quiz.OnlineTransactions.Practices
         {
             lock (this._syncroot)
             {
-                this._history.Add(new Item()
+                this._history.Add(new TransactionItem()
                 {
                     Date = DateTime.Now,
                     Amount = transferAmount,
@@ -65,7 +37,7 @@ namespace Quiz.OnlineTransactions.Practices
             }
         }
 
-        public override IEnumerable<Item> GetHistory()
+        public override IEnumerable<TransactionItem> GetHistory()
         {
             return this._history;
         }

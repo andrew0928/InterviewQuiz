@@ -20,7 +20,7 @@ namespace Quiz.OnlineTransactions.Contracts
         /// 取得所有交易紀錄 (按照順序)
         /// </summary>
         /// <returns></returns>
-        public abstract IEnumerable<Item> GetHistory();
+        public abstract IEnumerable<TransactionItem> GetHistory();
 
         /// <summary>
         /// 執行交易，將指定金額轉入該帳戶
@@ -69,11 +69,21 @@ namespace Quiz.OnlineTransactions.Contracts
         //}
 
 
-        public class Item
+
+
+        public class AccountItem
         {
-            public decimal Amount;
-            public DateTime Date;
-            public string Memo;
+            //public string Id { get; set; }
+            public string Name { get; set; }
+            public decimal Balance { get; set; }
+        }
+
+        public class TransactionItem
+        {
+            //public string Id { get; set; }
+            public decimal Amount { get; set; }
+            public DateTime Date { get; set; }
+            public string Memo { get; set; }
         }
     }
 

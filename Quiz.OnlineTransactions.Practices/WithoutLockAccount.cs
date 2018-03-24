@@ -10,7 +10,7 @@ namespace Quiz.OnlineTransactions.Practices
     public class WithoutLockAccount : AccountBase
     {
         private decimal _balance = 0;
-        private List<Item> _history = new List<Item>();
+        private List<TransactionItem> _history = new List<TransactionItem>();
         //private object _syncroot = new object();
 
 
@@ -23,7 +23,7 @@ namespace Quiz.OnlineTransactions.Practices
         {
             //lock (this._syncroot)
             {
-                this._history.Add(new Item()
+                this._history.Add(new TransactionItem()
                 {
                     Date = DateTime.Now,
                     Amount = transferAmount,
@@ -33,7 +33,7 @@ namespace Quiz.OnlineTransactions.Practices
             }
         }
 
-        public override IEnumerable<Item> GetHistory()
+        public override IEnumerable<TransactionItem> GetHistory()
         {
             return this._history;
         }

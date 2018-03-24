@@ -16,18 +16,24 @@ namespace Quiz.OnlineTransactions.TestConsole
             // skip DI, 建立指定的 account 實做機制
             //AccountBase bank = new Practices.LockAccount();
             //AccountBase bank = new Practices.WithoutLockAccount();
-            AccountBase bank = new Practices.TransactionAccount() { Name = "andrew" };
+            //AccountBase bank = new Practices.TransactionAccount() { Name = "andrew" };
+            AccountBase bank = new Practices.DistributedLockAccount() { Name = "andrew" };
 
 
-            long concurrent_threads = 100;
-            long repeat_count = 10000;
+            long concurrent_threads = 3;
+            long repeat_count = 1000;
             decimal origin_balance = bank.GetBalance();
 
             List<Thread> threads = new List<Thread>();
 
             for (int i = 0; i < concurrent_threads; i++)
             {
-                Thread t = new Thread(() => { for (int j = 0; j < repeat_count; j++) bank.ExecTransaction(1); });
+                Thread t = new Thread(() => {
+                    for (int j = 0; j < repeat_count; j++)
+                    {
+                        bank.ExecTransaction(1);
+                    }
+                });
                 threads.Add(t);
             }
 
@@ -49,8 +55,6 @@ namespace Quiz.OnlineTransactions.TestConsole
             {
                 Console.WriteLine($"Test FAIL! Total Time: {timer.ElapsedMilliseconds} msec. Expected Balance: {expected_balance}, Actual Balance: {actual_balance}");
             }
-
-
         }
     }
 }
