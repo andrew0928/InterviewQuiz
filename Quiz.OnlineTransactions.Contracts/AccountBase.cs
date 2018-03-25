@@ -8,6 +8,9 @@ namespace Quiz.OnlineTransactions.Contracts
 {
     public abstract class AccountBase
     {
+        /// <summary>
+        /// 帳戶擁有者的名字
+        /// </summary>
         public string Name = null;
 
         /// <summary>
@@ -70,7 +73,9 @@ namespace Quiz.OnlineTransactions.Contracts
 
 
 
-
+        /// <summary>
+        /// 帳戶資訊 Model, 若有需要設計 Data Model / Entity, 可以參考實作
+        /// </summary>
         public class AccountItem
         {
             //public string Id { get; set; }
@@ -78,6 +83,9 @@ namespace Quiz.OnlineTransactions.Contracts
             public decimal Balance { get; set; }
         }
 
+        /// <summary>
+        /// 交易資訊 Model, 若有需要設計 Data Model / Entity, 可以參考實作
+        /// </summary>
         public class TransactionItem
         {
             //public string Id { get; set; }
@@ -86,7 +94,4 @@ namespace Quiz.OnlineTransactions.Contracts
             public string Memo { get; set; }
         }
     }
-
-
-
 }

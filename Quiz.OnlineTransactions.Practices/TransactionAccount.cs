@@ -29,11 +29,11 @@ namespace Quiz.OnlineTransactions.Practices
         {
             return this.GetSqlConn().ExecuteScalar<decimal>(
                 @"
-begin tran
+--begin tran
   insert [transactions] ([userid], [amount]) values (@name, @transfer);
   update [accounts] set [balance] = [balance] + @transfer where userid = @name;
   select [balance] from [accounts] where userid = @name;
-commit
+--commit
 ",
                 new { name = this.Name, transfer = transferAmount });
         }

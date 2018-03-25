@@ -43,7 +43,7 @@ namespace Quiz.OnlineTransactions.Practices
         {
             var resource = $"account-transaction::{this.Name}";
             var expiry = TimeSpan.FromSeconds(5);
-            var wait = TimeSpan.FromSeconds(5);
+            var wait = TimeSpan.FromSeconds(60);
             var retry = TimeSpan.FromMilliseconds(50);
 
             using (var redLock = this._redlock.CreateLock(resource, expiry, wait, retry))

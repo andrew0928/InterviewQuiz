@@ -20,7 +20,7 @@ namespace Quiz.OnlineTransactions.TestConsole
             AccountBase bank = new Practices.DistributedLockAccount() { Name = "andrew" };
 
 
-            long concurrent_threads = 3;
+            long concurrent_threads = 20;
             long repeat_count = 1000;
             decimal origin_balance = bank.GetBalance();
 
@@ -47,14 +47,10 @@ namespace Quiz.OnlineTransactions.TestConsole
             decimal expected_balance = origin_balance + concurrent_threads * repeat_count;
             decimal actual_balance = bank.GetBalance();
 
-            if (expected_balance == actual_balance)
-            {
-                Console.WriteLine($"Test PASS! Total Time: {timer.ElapsedMilliseconds} msec.");
-            }
-            else
-            {
-                Console.WriteLine($"Test FAIL! Total Time: {timer.ElapsedMilliseconds} msec. Expected Balance: {expected_balance}, Actual Balance: {actual_balance}");
-            }
+            Console.WriteLine( "Test Result for {1}: {0}!", (expected_balance == actual_balance)?("PASS"):("FAIL"), bank.GetType().Name);
+            Console.WriteLine($"- Expected Balance: {expected_balance}");
+            Console.WriteLine($"- Actual Balance: {actual_balance}");
+            Console.WriteLine($"- Performance: {concurrent_threads * repeat_count * 1000 / timer.ElapsedMilliseconds} trans/sec");
         }
     }
 }
