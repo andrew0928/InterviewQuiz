@@ -15,7 +15,7 @@ namespace Quiz.LastHourStatistics.Practices
         private IDatabase redis = ConnectionMultiplexer.Connect("172.18.253.232:6379").GetDatabase();
 
 
-        public InRedisEngine(bool start_worker = false)
+        public InRedisEngine(bool start_worker = true)
         {
             //this._queue = new Queue<QueueItem>();
 
@@ -36,7 +36,7 @@ namespace Quiz.LastHourStatistics.Practices
         {
             get
             {
-                return (int)this.redis.StringGet("statistic");
+                return (int)this.redis.StringGet("statistic") + (int)this.redis.StringGet("buffer");
             }
         }
 
@@ -73,8 +73,6 @@ namespace Quiz.LastHourStatistics.Practices
                 _time = DateTime.Now
             }));
 
-
-
             //this._statistic_result += buffer_value;
             this.redis.StringIncrement("statistic", buffer_value);
 
@@ -87,8 +85,8 @@ namespace Quiz.LastHourStatistics.Practices
 
                 {
                     //QueueItem dqitem = this._queue.Dequeue();
-                    //dqitem = QueueItem.Decode((string)this.redis.ListLeftPop("queue"));
-                    this.redis.ListLeftPop("queue");
+                    dqitem = QueueItem.Decode((string)this.redis.ListLeftPop("queue"));
+                    //this.redis.ListLeftPop("queue");
 
                     //this._statistic_result -= dqitem._count;
                     this.redis.StringDecrement("statistic", dqitem._count);

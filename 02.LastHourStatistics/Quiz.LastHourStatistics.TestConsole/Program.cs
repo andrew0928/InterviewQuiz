@@ -65,7 +65,7 @@ namespace Quiz.LastHourStatistics.TestConsole
                 new InMemoryEngine();
 
             EngineBase e2 =
-                new InMemoryEngine();
+                new InRedisEngine();
 
             bool stop = false;
 
@@ -87,23 +87,16 @@ namespace Quiz.LastHourStatistics.TestConsole
                 threads.Add(t);
                 t.Start();
             }
-            
-            //int expected_result = (0 + 59) * 60 / 2;
-            Task t2 = Task.Run(() => {
-                while (stop == false)
-                {
-                    Task.Delay(300).Wait();
-                    Console.WriteLine($"statistic #1: {e1.StatisticResult}, statistic #2: {e2.StatisticResult}, compare: {e1.StatisticResult == e2.StatisticResult}");
-                }
-            });
 
-
-
-            Console.ReadLine();
+            TimeSpan duration = TimeSpan.FromSeconds(10);
+            Thread.Sleep(duration);
             stop = true;
-            //Task.WaitAll(t1, t2);
             foreach (Thread t in threads) t.Join();
-            t2.Wait();
+
+            Console.WriteLine($"engine #1:   {e1.StatisticResult} ({e1.GetType().Name})");
+            Console.WriteLine($"engine #2:   {e2.StatisticResult} ({e2.GetType().Name})");
+            Console.WriteLine($"compare:     {e1.StatisticResult == e2.StatisticResult} (diff: {(e1.StatisticResult - e2.StatisticResult) * 100.0 / e1.StatisticResult:0.00}%)");
+            Console.WriteLine($"performance: {e1.StatisticResult / duration.TotalMilliseconds} orders/msec");
         }
     }
 
