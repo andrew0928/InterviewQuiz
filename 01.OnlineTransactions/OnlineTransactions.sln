@@ -1,10 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.27428.2011
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Online Transactions", "Online Transactions", "{44A96B7A-BBB0-426D-8E87-FB30DC314FD7}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quiz.OnlineTransactions.Contracts", "Quiz.OnlineTransactions.Contracts\Quiz.OnlineTransactions.Contracts.csproj", "{31D74E97-7FE7-4AC7-B2EF-CA0415B11A1E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quiz.OnlineTransactions.TestConsole", "Quiz.OnlineTransactions.TestConsole\Quiz.OnlineTransactions.TestConsole.csproj", "{6ED6F05E-DD9C-4C50-A91E-73554FEE0439}"
@@ -33,9 +31,7 @@ Global
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{31D74E97-7FE7-4AC7-B2EF-CA0415B11A1E} = {44A96B7A-BBB0-426D-8E87-FB30DC314FD7}
-		{6ED6F05E-DD9C-4C50-A91E-73554FEE0439} = {44A96B7A-BBB0-426D-8E87-FB30DC314FD7}
-		{C6EFAE78-FE73-46C0-9B0A-3AC11AFF5414} = {44A96B7A-BBB0-426D-8E87-FB30DC314FD7}
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0415082F-C5BE-4FA2-96D2-00E1E935E506}
 	EndGlobalSection
 EndGlobal
