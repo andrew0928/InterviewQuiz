@@ -11,14 +11,10 @@ namespace Quiz.LastHourStatistics.Practices
 {
     public class InRedisEngine : EngineBase
     {
-        //private static ConnectionMultiplexer redis = ConnectionMultiplexer.Connect("server1:6379,server2:6379");
         private IDatabase redis = ConnectionMultiplexer.Connect("172.18.253.232:6379").GetDatabase();
-
 
         public InRedisEngine(bool start_worker = true)
         {
-            //this._queue = new Queue<QueueItem>();
-
             if (start_worker)
             {
                 Task.Run(() =>
@@ -51,46 +47,24 @@ namespace Quiz.LastHourStatistics.Practices
         // 控制統計的精確度
         private readonly TimeSpan _interval = TimeSpan.FromSeconds(0.1);
 
-        //private Queue<QueueItem> _queue = null;
-
-        //private int _statistic_result = 0;
-
-        //private int _buffer = 0;
-
         private void _statistic_timer_worker()
         {
-            //int buffer_value = Interlocked.Exchange(ref this._buffer, 0);
             int buffer_value = (int)this.redis.StringGetSet("buffer", 0);
-
-            //this._queue.Enqueue(new QueueItem()
-            //{
-            //    _count = buffer_value,
-            //    _time = DateTime.Now
-            //});
             this.redis.ListRightPush("queue", QueueItem.Encode(new QueueItem()
             {
                 _count = buffer_value,
                 _time = DateTime.Now
             }));
-
-            //this._statistic_result += buffer_value;
             this.redis.StringIncrement("statistic", buffer_value);
 
             while (true)
             {
-                //if (this._queue.Peek()._time >= (DateTime.Now - this._period)) break;
                 QueueItem dqitem = QueueItem.Decode((string)this.redis.ListGetByIndex("queue", 0));
 
                 if (dqitem._time >= (DateTime.Now - this._period)) break;
 
-                {
-                    //QueueItem dqitem = this._queue.Dequeue();
-                    dqitem = QueueItem.Decode((string)this.redis.ListLeftPop("queue"));
-                    //this.redis.ListLeftPop("queue");
-
-                    //this._statistic_result -= dqitem._count;
-                    this.redis.StringDecrement("statistic", dqitem._count);
-                }
+                dqitem = QueueItem.Decode((string)this.redis.ListLeftPop("queue"));
+                this.redis.StringDecrement("statistic", dqitem._count);
             }
         }
 

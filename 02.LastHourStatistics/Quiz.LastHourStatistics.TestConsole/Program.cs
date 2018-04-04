@@ -14,8 +14,8 @@ namespace Quiz.LastHourStatistics.TestConsole
         static void Main(string[] args)
         {
             //FuncTest();
-            EngineCompareCheck();
-            //LoadTest();
+            //EngineCompareCheck();
+            LoadTest();
         }
 
 
@@ -98,6 +98,44 @@ namespace Quiz.LastHourStatistics.TestConsole
             Console.WriteLine($"compare:     {e1.StatisticResult == e2.StatisticResult} (diff: {(e1.StatisticResult - e2.StatisticResult) * 100.0 / e1.StatisticResult:0.00}%)");
             Console.WriteLine($"performance: {e1.StatisticResult / duration.TotalMilliseconds} orders/msec");
         }
+
+        static void LoadTest()
+        {
+            EngineBase e1 =
+                //new InMemoryEngine();
+                //new InDatabaseEngine();
+                new InRedisEngine();
+
+
+            bool stop = false;
+
+            int thread_count = 20;
+
+            List<Thread> threads = new List<Thread>();
+            for (int i = 0; i < thread_count; i++)
+            {
+                Thread t = new Thread(() =>
+                {
+                    while (stop == false)
+                    {
+                        Thread.Sleep(0);
+                        e1.CreateOrders(1);
+                    }
+                });
+
+                threads.Add(t);
+                t.Start();
+            }
+
+            TimeSpan duration = TimeSpan.FromSeconds(10);
+            Thread.Sleep(duration);
+            stop = true;
+            foreach (Thread t in threads) t.Join();
+
+            Console.WriteLine($"engine #1:   {e1.StatisticResult} ({e1.GetType().Name})");
+            Console.WriteLine($"performance: {e1.StatisticResult / duration.TotalMilliseconds} orders/msec");
+        }
+
     }
 
 
