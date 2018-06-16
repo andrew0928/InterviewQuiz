@@ -13,7 +13,7 @@ namespace Quiz.LastHourStatistics.Practices
     {
         private IDatabase redis = ConnectionMultiplexer.Connect("172.18.253.232:6379").GetDatabase();
 
-        public InRedisEngine(bool start_worker = true)
+        public InRedisEngine(bool start_worker = true, TimeSpan? time_window = null) : base(time_window??TimeSpan.FromMinutes(1))
         {
             if (start_worker)
             {
@@ -42,7 +42,7 @@ namespace Quiz.LastHourStatistics.Practices
         }
 
         // 控制統計區間長度
-        private readonly TimeSpan _period = TimeSpan.FromMinutes(1);
+        //private readonly TimeSpan _period = TimeSpan.FromMinutes(1);
 
         // 控制統計的精確度
         private readonly TimeSpan _interval = TimeSpan.FromSeconds(0.1);
@@ -61,7 +61,7 @@ namespace Quiz.LastHourStatistics.Practices
             {
                 QueueItem dqitem = QueueItem.Decode((string)this.redis.ListGetByIndex("queue", 0));
 
-                if (dqitem._time >= (DateTime.Now - this._period)) break;
+                if (dqitem._time >= (DateTime.Now - this.TimeWindow)) break;
 
                 dqitem = QueueItem.Decode((string)this.redis.ListLeftPop("queue"));
                 this.redis.StringDecrement("statistic", dqitem._count);

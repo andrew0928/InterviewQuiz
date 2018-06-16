@@ -9,6 +9,11 @@ namespace Quiz.LastHourStatistics.Contracts
 {
     public class DummyEngine : EngineBase
     {
+        public DummyEngine() : base(TimeSpan.FromMinutes(1))
+        {
+
+        }
+
         public override int StatisticResult
         {
             get

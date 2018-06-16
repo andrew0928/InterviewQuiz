@@ -12,7 +12,8 @@ namespace Quiz.LastHourStatistics.Practices
     {
         private bool _use_lock = false;
 
-        public InMemoryEngine(bool use_lock = true)
+        public InMemoryEngine(bool use_lock = true, TimeSpan? timeWindow = null) :
+            base(timeWindow??TimeSpan.FromMinutes(1))
         {
             this._queue = new Queue<QueueItem>();
             this._use_lock = use_lock;
@@ -43,7 +44,7 @@ namespace Quiz.LastHourStatistics.Practices
         }
 
         // 控制統計區間長度
-        private readonly TimeSpan _period = TimeSpan.FromMinutes(1);
+        //private readonly TimeSpan _period = TimeSpan.Zero; //TimeSpan.FromMinutes(1);
 
         // 控制統計的精確度
         private readonly TimeSpan _interval = TimeSpan.FromSeconds(0.1);
@@ -77,7 +78,7 @@ namespace Quiz.LastHourStatistics.Practices
 
             while (true)
             {
-                if (this._queue.Peek()._time >= (DateTime.Now - this._period)) break;
+                if (this._queue.Peek()._time >= (DateTime.Now - this.TimeWindow)) break;
                 {
                     QueueItem dqitem = this._queue.Dequeue();
                     this._statistic_result -= dqitem._count;

@@ -11,11 +11,19 @@ namespace Quiz.LastHourStatistics.Practices
 {
     public class InDatabaseEngine : EngineBase
     {
+        public InDatabaseEngine(TimeSpan? time_window = null) :
+            base(time_window??TimeSpan.FromMinutes(1))
+        {
+
+        }
+
         public override int StatisticResult
         {
             get
             {
-                return this.GetSqlConn().ExecuteScalar<int>(@"select sum(amount) from [orders] where time between dateadd(second, -60, getdate()) and getdate();");
+                return this.GetSqlConn().ExecuteScalar<int>(
+                    @"select sum(amount) from [orders] where time between dateadd(second, @second, getdate()) and getdate();",
+                    new { second = this.TimeWindow.TotalSeconds });
             }
         }
 
