@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Quiz.ThrottleControl</RootNamespace>
     <AssemblyName>Quiz.ThrottleControl</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -20,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -40,8 +42,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Throttle.cs" />
+    <Compile Include="CounterThrottle.cs" />
+    <Compile Include="DummyThrottle.cs" />
+    <Compile Include="LeakyBucketThrottle.cs" />
+    <Compile Include="StatisticEngineThrottle.cs" />
+    <Compile Include="ThrottleBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TokenBucketThrottle.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Quiz.LastHourStatistics.Contracts\Quiz.LastHourStatistics.Contracts.csproj">
